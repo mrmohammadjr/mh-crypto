@@ -25,7 +25,7 @@ export function useAddToWatchlist() {
 
   return useMutation({
     mutationFn: async (coin: WatchlistItem) => {
-      const res = await fetch("/api/watchList", {
+      const res = await fetch("/api/watchlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(coin),
