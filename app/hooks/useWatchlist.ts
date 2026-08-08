@@ -64,7 +64,7 @@ export function useRemoveFromWatchlist() {
 
   return useMutation({
     mutationFn: async (coinId: string) => {
-      const res = await fetch("/api/watchList", {
+      const res = await fetch("/api/watchlist", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coinId }),
