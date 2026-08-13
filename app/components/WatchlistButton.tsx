@@ -1,21 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import {
   useAddToWatchlist,
   useRemoveFromWatchlist,
   useWatchlist,
 } from "@/app/hooks/useWatchlist";
-
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 interface CoinType {
   coinId: string;
   coinName: string;
   coinIcon: string;
-  coinPrice: number;
+  coinPrice: string | number;
   coinSymbol: string;
-  coinPriceDay: number;
-  coinMarketCap: number;
+  coinPriceDay: string | number;
+  coinMarketCap: string | number;
 }
 
 export function WatchlistButton({
@@ -32,24 +31,14 @@ export function WatchlistButton({
 
   const isLoggedIn = status === "authenticated";
   const isLoadingSession = status === "loading";
-
   const { data: watchlist } = useWatchlist();
-
   const addMutation = useAddToWatchlist();
   const removeMutation = useRemoveFromWatchlist();
 
-  const isWatched =
-    watchlist?.some((coin) => coin.coinId === coinId) ?? false;
-
-  const pending =
-    addMutation.isPending || removeMutation.isPending;
+  const isWatched = watchlist?.some((c) => c.coinId === coinId);
+  const pending = addMutation.isPending || removeMutation.isPending;
 
   function toggleWatchlist() {
-    if (!isLoggedIn) {
-      router.push("/login");
-      return;
-    }
-
     if (isWatched) {
       removeMutation.mutate(coinId);
     } else {
@@ -67,23 +56,11 @@ export function WatchlistButton({
 
   return (
     <button
-      type="button"
-      onClick={toggleWatchlist}
-      disabled={isLoadingSession || pending}
-      title={
-        !isLoggedIn
-          ? "Log in to add coins to your watchlist"
-          : undefined
-      }
+      onClick={isLoggedIn ? toggleWatchlist : () => router.push("/login")}
+      disabled={pending}
       className="rounded-lg bg-green-600 px-3 py-1.5 text-sm text-white hover:bg-green-500 disabled:opacity-50"
     >
-      {isLoadingSession
-        ? "Loading..."
-        : !isLoggedIn
-          ? "Log in to add"
-          : isWatched
-            ? "Remove from watchlist"
-            : "Add to watchlist"}
+      {isWatched ? "Remove from watchlist" : "Add to watchlist"}
     </button>
   );
 }
