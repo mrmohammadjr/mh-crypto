@@ -52,7 +52,7 @@ const Banner = () => {
           Chart
         </Link>
         <Link
-          href={"/currencies"}
+          href={"/currency"}
           className="px-3 py-2 bg-white text-black rounded-xl text-xl cursor-pointer hover:bg-gray-200 transition"
         >
           Currencies
