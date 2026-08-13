@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useAddToWatchlist, useRemoveFromWatchlist, useWatchlist } from "@/app/hooks/useWatchlist";
 
 interface CoinType {
@@ -21,7 +23,11 @@ export function WatchlistButton({
   coinPriceDay,
   coinMarketCap,
 }: CoinType) {
-  const { data: watchlist } = useWatchlist();
+  const { status } = useSession();
+  const router = useRouter();
+  const isLoggedIn = status === "authenticated";
+
+  const { data: watchlist } = useWatchlist({ enabled: isLoggedIn }); // see note below
   const addMutation = useAddToWatchlist();
   const removeMutation = useRemoveFromWatchlist();
 
@@ -29,6 +35,11 @@ export function WatchlistButton({
   const pending = addMutation.isPending || removeMutation.isPending;
 
   function toggleWatchlist() {
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
     if (isWatched) {
       removeMutation.mutate(coinId);
     } else {
@@ -47,10 +58,15 @@ export function WatchlistButton({
   return (
     <button
       onClick={toggleWatchlist}
-      disabled={pending}
+      disabled={status === "loading" || pending}
+      title={!isLoggedIn ? "Log in to add coins to your watchlist" : undefined}
       className="rounded-lg bg-green-600 px-3 py-1.5 text-sm text-white hover:bg-green-500 disabled:opacity-50"
     >
-      {isWatched ? "Remove from watchlist" : "Add to watchlist"}
+      {!isLoggedIn
+        ? "Log in to add"
+        : isWatched
+        ? "Remove from watchlist"
+        : "Add to watchlist"}
     </button>
   );
 }
