@@ -33,7 +33,7 @@ export function WatchlistButton({
   const isLoggedIn = status === "authenticated";
   const isLoadingSession = status === "loading";
 
-  const { data: watchlist } = useWatchlist(isLoggedIn);
+  const { data: watchlist } = useWatchlist();
 
   const addMutation = useAddToWatchlist();
   const removeMutation = useRemoveFromWatchlist();
