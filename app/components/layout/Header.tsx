@@ -4,11 +4,10 @@ import React from "react";
 import Image from "next/image";
 import Logo from "@/app/assets/logo.webp";
 import Link from "next/link";
-import { useSession,signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { ROUTES } from "@/lib/constants";
 
 const Header = () => {
-  
   const { data: session, status } = useSession();
   return (
     <div className="p-5 flex items-center justify-between bg-gradient-to-r from-black to-[#2d2d2d]">
@@ -29,6 +28,11 @@ const Header = () => {
             Chart
           </Link>
         </li>
+        <li>
+          <Link href={ROUTES.news} className="hover:text-green-400 transition">
+            News
+          </Link>
+        </li>
         {status === "authenticated" && session?.user ? (
           <>
             <li>
@@ -41,7 +45,7 @@ const Header = () => {
             </li>
             <li>
               <button
-                   onClick={() => signOut({ callbackUrl: "/login" })}
+                onClick={() => signOut({ callbackUrl: "/login" })}
                 className="hover:text-green-400 transition"
               >
                 Logout
