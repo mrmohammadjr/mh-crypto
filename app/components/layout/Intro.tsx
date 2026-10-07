@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-// import { ROUTES } from "@/lib/constants";
+ import { ROUTES } from "@/lib/constants";
 
 const Intro = () => {
   return (
@@ -15,7 +15,7 @@ const Intro = () => {
           never miss a market move.
         </p>
         <Link
-          href={"/register"}
+          href={ROUTES.register}
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg"
         >
           Get Started
